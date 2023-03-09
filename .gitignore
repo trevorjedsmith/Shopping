@@ -4,3 +4,7 @@
 
 /.vs
 /Shopping/Shopping.Client/obj
+/Shopping/Shopping.API/obj
+/Shopping/Shopping.API/bin/Debug/net5.0
+/Shopping/.vs/Shopping/v17
+/Shopping/Shopping.Client/bin/Debug/net5.0
