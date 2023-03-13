@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Shopping.API.Models;
 using System.Collections.Generic;
@@ -8,13 +9,20 @@ namespace Shopping.API.Data
 {
     public class ProductContext
     {
-        public ProductContext(IConfiguration configuration)
+        private readonly ILogger<ProductContext> _logger;
+
+        public ProductContext(IConfiguration configuration, ILogger<ProductContext> logger)
         {
-            var client = new MongoClient(configuration["DatabaseSettings:ConnectionString"]);
-            var database = client.GetDatabase(configuration["DatabaseSettings:DatabaseName"]);
+            _logger = logger;
+            var connstring = configuration["DatabaseSettings:ConnectionString"];
+            var db = configuration["DatabaseSettings:DatabaseName"];
+            var client = new MongoClient(connstring);
+            _logger.LogInformation($"Connecting with connection string {connstring}");
+            var database = client.GetDatabase(db);
+            _logger.LogInformation($"To database {db}");
 
             Products = database.GetCollection<Product>(configuration["DatabaseSettings:CollectionName"]);
-            SeedData(Products);
+            SeedData(Products);           
         }
 
         public IMongoCollection<Product> Products { get; }
